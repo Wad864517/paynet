@@ -1,0 +1,12 @@
+version: '3'
+services:
+  paynet:
+    build: .
+    ports:
+      - "51888:51888"
+    volumes:
+      - ./data:/app/data
+      - ./.quant:/app/.quant
+      - ./reports:/app/reports
+    restart: unless-stopped
+    # 容器内 python_exe 需配为 'python'（启动后调 /api/config POST {"python_exe":"python"}）

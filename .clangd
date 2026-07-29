@@ -1,0 +1,29 @@
+CompileFlags:
+  CompilationDatabase: build
+  Remove:
+    - -mlongcalls
+    - -mtext-section-literals
+    - -fno-rtti
+    - -fno-exceptions
+    - -fstrict-volatile-bitfields
+    - -mfix-esp32-psram-cache-issue
+    - -mfix-esp32-psram-cache-strategy=memw
+    - -mno-target-align
+    - -mauto-litpools
+    - -fno-tree-switch-conversion
+    - -fno-jump-tables
+    - -ffast-math
+    - -mhard-float
+    - -mdiv
+    - -mpeek
+    - -mconst16
+    - -mrecip
+    - -mopt32
+    - -mfused-madd
+    - -mno-serialize-volatile
+    - -mforce-no-pic
+    - -fno-builtin-memcpy
+    - -fno-builtin-memset
+    - -fno-builtin-bzero
+    - -fno-builtin-stpcpy
+    - -fno-builtin-strncpy
