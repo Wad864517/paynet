@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>paynet 量化仪表盘</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--border:#e6e8eb;--text:#1f2329;--muted:#8a8f99;--up:#e24b4a;--down:#1d9e75;--accent:#0c447c;--warn:#ba7517;--ok:#0f6e56}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+header h1{font-size:16px;margin:0;font-weight:500}
+header .meta{font-size:12px;opacity:.85}
+header .spacer{flex:1}
+.btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:13px}
+.btn:hover{background:#f0f2f5}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:#0a3560}
+.btn-sm{padding:3px 8px;font-size:12px}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:4px;overflow-x:auto;position:sticky;top:0;z-index:10}
+nav button{border:none;background:transparent;padding:12px 16px;cursor:pointer;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+main{padding:20px;max-width:1320px;margin:0 auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card .label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.card .value{font-size:22px;font-weight:500}
+.card .sub{font-size:12px;color:var(--muted);margin-top:6px}
+.up{color:var(--up)} .down{color:var(--down)}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.panel h2{font-size:15px;margin:0 0 12px;font-weight:500;display:flex;align-items:center;gap:8px}
+.panel .time{font-size:12px;color:var(--muted);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:#fafbfc;color:var(--muted);font-weight:500;font-size:12px;white-space:nowrap}
+tr:hover td{background:#fafbfc}
+.md{line-height:1.7;font-size:14px;word-break:break-word}
+.md h1,.md h2,.md h3{margin:16px 0 8px}
+.md pre{background:#f5f6f8;padding:10px;border-radius:6px;overflow:auto;font-size:12px}
+.md code{background:#f0f2f5;padding:1px 4px;border-radius:3px;font-size:12px}
+.md table{margin:8px 0}
+.md table th,.md table td{border:1px solid var(--border)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:#eef0f3;color:var(--muted)}
+.badge.run{background:#fff3e0;color:var(--warn)}
+.badge.done{background:#e1f5ee;color:var(--ok)}
+.empty{color:var(--muted);text-align:center;padding:40px}
+.refresh-bar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.log{background:#1f2329;color:#cdd3dc;padding:12px;border-radius:8px;font-family:Consolas,monospace;font-size:12px;max-height:260px;overflow:auto;white-space:pre-wrap}
+.tag-up{color:var(--up);font-weight:500} .tag-down{color:var(--down);font-weight:500}
+iframe{width:100%;height:600px;border:1px solid var(--border);border-radius:8px}
+.report-list a{display:block;padding:8px 12px;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;text-decoration:none;color:var(--accent)}
+.report-list a:hover{background:#f0f6ff}
+.hidden{display:none}
+#settingsModal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:100}
+#settingsModal.show{display:flex}
+.modal{background:#fff;border-radius:10px;padding:20px;width:460px;max-width:92%}
+.modal h3{margin:0 0 12px}
+.modal input{width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px}
+.scroll-tbl{max-height:480px;display:block;overflow:auto}
+@media(max-width:768px){.cards{grid-template-columns:1fr}nav{padding:0 8px}main{padding:10px}.scroll-tbl{max-height:320px}header{flex-wrap:wrap;gap:8px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>paynet 量化仪表盘</h1>
+  <span class="meta" id="dataDate">数据日期: --</span>
+  <span class="meta" id="userName" style="opacity:.85"></span>
+  <span class="spacer"></span>
+  <button class="btn btn-sm" style="border-color:rgba(255,255,255,.4);background:transparent;color:#fff" onclick="logout()">退出</button>
+  <button class="btn btn-sm" style="border-color:rgba(255,255,255,.4);background:transparent;color:#fff" onclick="openSettings()">设置</button>
+  <button class="btn btn-primary btn-sm" onclick="refreshAll()">刷新全部</button>
+</header>
+<nav id="nav">
+  <button class="active" data-tab="overview">概览</button>
+  <button data-tab="ai">AI选股</button>
+  <button data-tab="sentiment">市场情绪</button>
+  <button data-tab="news">新闻情绪</button>
+  <button data-tab="money">资金追踪</button>
+  <button data-tab="scan">技术面</button>
+  <button data-tab="positions">模拟持仓</button>
+  <button data-tab="daily">每日日报</button>
+  <button data-tab="reports">报告</button>
+  <button data-tab="screener">选股研究</button>
+  <button data-tab="backtest">策略回测</button>
+</nav>
+<main>
+  <div id="tab-overview" class="tabpane">
+    <div class="cards" id="ovCards"></div>
+    <div class="panel"><h2>各模块状态 <span class="time" id="ovStatus"></span></h2><div id="moduleStatus"></div></div>
+  </div>
+  <div id="tab-ai" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('ai_screening')">刷新 AI选股</button><span class="badge" id="badge-ai_screening"></span><span class="time" id="time-ai"></span></div>
+    <div class="panel"><div class="md" id="aiContent"><div class="empty">加载中...</div></div></div>
+  </div>
+  <div id="tab-sentiment" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('sentiment')">刷新 市场情绪</button><span class="badge" id="badge-sentiment"></span></div>
+    <div class="cards" id="sentCards"></div>
+    <div class="panel"><h2>情绪报告</h2><div class="md" id="sentReport"><div class="empty">加载中...</div></div></div>
+  </div>
+  <div id="tab-news" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('news_sentiment')">刷新 新闻情绪</button><span class="badge" id="badge-news_sentiment"></span><span class="time" id="time-news"></span></div>
+    <div class="panel"><div class="md" id="newsContent"><div class="empty">加载中...</div></div></div>
+  </div>
+  <div id="tab-money" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('money_tracker')">刷新 资金追踪</button><span class="badge" id="badge-money_tracker"></span><span class="time" id="time-north"></span></div>
+    <div class="panel"><h2>北向资金汇总</h2><div id="northSummary" class="scroll-tbl"></div></div>
+    <div class="panel"><h2>近10日北向资金(亿)</h2><canvas id="northChart" height="80"></canvas></div>
+    <div class="panel"><h2>龙虎榜</h2><div id="lhbTable" class="scroll-tbl"></div></div>
+  </div>
+  <div id="tab-scan" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('daily_scan')">刷新 技术面扫描</button><span class="badge" id="badge-daily_scan"></span><span class="time" id="time-scan"></span></div>
+    <div class="panel"><h2>技术面扫描结果</h2><div id="scanTable" class="scroll-tbl"></div></div>
+  </div>
+  <div id="tab-positions" class="tabpane hidden">
+    <div class="cards" id="posCards"></div>
+    <div class="panel"><h2>当前持仓</h2><div id="posTable" class="scroll-tbl"></div></div>
+    <div class="panel"><h2>交易历史</h2><div id="histTable" class="scroll-tbl"></div></div>
+  </div>
+  <div id="tab-daily" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('daily_workflow')">一键跑全流程</button><span class="badge" id="badge-daily_workflow"></span><span class="time" id="time-daily"></span></div>
+    <div class="panel"><div class="md" id="dailyContent"><div class="empty">加载中...</div></div></div>
+  </div>
+  <div id="tab-reports" class="tabpane hidden">
+    <div class="panel"><h2>HTML 报告</h2><div class="report-list" id="reportList"></div></div>
+    <div class="panel hidden" id="reportViewer"><h2 id="reportTitle"></h2><iframe id="reportFrame"></iframe></div>
+  </div>
+  <div id="tab-screener" class="tabpane hidden">
+    <div class="refresh-bar"><input id="pickQuery" placeholder="自然语言选股研究(如:涨幅前20/低估值大盘)" style="flex:1;min-width:200px;padding:6px;border:1px solid var(--border);border-radius:6px"><button class="btn btn-sm btn-primary" onclick="smartPick()">选股研究</button><span id="pickResult" style="font-size:12px;color:var(--muted)"></span></div>
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('screener')">刷新选股研究</button><span class="badge" id="badge-screener"></span><span class="time" id="time-screener"></span></div>
+    <div class="cards" id="screenerCards"></div>
+    <div class="panel"><h2>选股研究信号 <span class="time" id="screenerTier"></span></h2><div id="screenerTable" class="scroll-tbl"></div></div>
+    <div class="panel"><h2>AI 研究分析</h2><div class="md" id="screenerAnalysis"><div class="empty">加载中...</div></div></div>
+    <div class="panel"><div style="font-size:12px;color:var(--muted);background:#fafbfc;padding:10px;border-radius:6px" id="screenerDisclaimer"></div></div>
+  </div>
+  <div id="tab-backtest" class="tabpane hidden">
+    <div class="refresh-bar"><button class="btn btn-sm btn-primary" onclick="doRefresh('backtest')">刷新回测</button><span class="badge" id="badge-backtest"></span><span class="time" id="time-bt"></span></div>
+    <div class="cards" id="btCards"></div>
+    <div class="panel"><h2>回测明细 <span class="time" id="btTime"></span></h2><div id="btTable" class="scroll-tbl"></div></div>
+    <div class="panel"><h2>交易记录</h2><div id="btTrades" class="scroll-tbl"></div></div>
+    <div class="panel"><div style="font-size:12px;color:var(--muted);background:#fafbfc;padding:10px;border-radius:6px" id="btDisclaimer"></div></div>
+  </div>
+</main>
+
+<div id="settingsModal">
+  <div class="modal">
+    <h3>设置 - 刷新用的 Python 路径</h3>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">用于跑 daily_scan / money_tracker / sentiment / ai_screening 等脚本(需装 akshare/openai/pandas)</div>
+    <input id="pyInput" placeholder="C:\...\python.exe">
+    <div id="pyProbe" style="font-size:12px;margin:6px 0"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-sm" onclick="probePy()">检测</button>
+      <button class="btn btn-sm btn-primary" onclick="savePy()">保存</button>
+      <button class="btn btn-sm" onclick="closeSettings()">取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOKEN=localStorage.getItem('paynet_token')||'';
+if(!TOKEN){location.href='/';}
+const _origFetch=window.fetch;
+window.fetch=function(u,o){o=o||{};o.headers=Object.assign({},o.headers||{},{'Authorization':'Bearer '+TOKEN});return _origFetch.call(this,u,o).then(function(r){if(r.status===401||r.status===403){location.href='/';}return r;});};
+let currentTab='overview',pollTimer=null,northChartObj=null;
+document.querySelectorAll('#nav button').forEach(b=>{b.onclick=()=>switchTab(b.dataset.tab);});
+
+function switchTab(t){
+  currentTab=t;
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('tab-'+t).classList.remove('hidden');
+  loadTab(t);
+}
+async function get(url){const r=await fetch(url);return r.json();}
+function fmt(n,d=2){if(n===null||n===undefined||n===''||isNaN(n))return '--';return Number(n).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function pctCls(v){return v>=0?'up':'down';}
+function arrow(v){return v>=0?'▲':'▼';}
+function renderMD(id,txt){document.getElementById(id).innerHTML=txt?(window.marked?marked.parse(txt):'<pre>'+txt+'</pre>'):'<div class="empty">暂无数据</div>';}
+function tableFromCSV(header,rows){
+  if(!header||!header.length)return '<div class="empty">暂无数据</div>';
+  let h='<table><thead><tr>'+header.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{h+='<tr>'+r.map(c=>'<td>'+(c==null?'':c)+'</td>').join('')+'</tr>';});
+  return h+'</tbody></table>';
+}
+async function loadTab(t){
+  if(t==='overview')loadOverview();
+  else if(t==='ai')loadAI();
+  else if(t==='sentiment')loadSentiment();
+  else if(t==='news')loadNews();
+  else if(t==='money')loadMoney();
+  else if(t==='scan')loadScan();
+  else if(t==='positions')loadPositions();
+  else if(t==='daily')loadDaily();
+  else if(t==='reports')loadReports();
+  else if(t==='screener')loadScreener();
+  else if(t==='backtest')loadBacktest();
+}
+async function loadOverview(){
+  const o=await get('/api/overview');
+  document.getElementById('dataDate').textContent='数据日期: '+(o.data_date||'--')+'  ·  更新: '+(o.data_dir_mtime||'--');
+  const cards=[
+    {label:'市场情绪分数',value:o.sentiment_score!=null?Number(o.sentiment_score).toFixed(1):'--',sub:o.sentiment_level||'',cls:o.sentiment_score>=50?'up':'down'},
+    {label:'持仓市值(¥)',value:fmt(o.total_market_value),sub:(o.positions_count||0)+' 只',cls:''},
+    {label:'浮动盈亏(¥)',value:fmt(o.total_pnl),sub:arrow(o.total_pnl),cls:pctCls(o.total_pnl)},
+    {label:'情绪建议',value:(o.sentiment_level||'--'),sub:(o.sentiment_advice||'').slice(0,18),cls:o.sentiment_score>=50?'up':'down'},
+  ];
+  document.getElementById('ovCards').innerHTML=cards.map(c=>'<div class="card"><div class="label">'+c.label+'</div><div class="value '+c.cls+'">'+c.value+'</div><div class="sub '+c.cls+'">'+(c.sub||'')+'</div></div>').join('');
+  const ms=await get('/api/modules');
+  let html='<table><thead><tr><th>模块</th><th>脚本</th><th>状态</th><th>上次刷新</th><th>操作</th></tr></thead><tbody>';
+  for(const[k,v]of Object.entries(ms.modules)){
+    const run=ms.running[k],last=ms.last_refresh[k]||'--';
+    const badge=run?'<span class="badge run">运行中</span>':'<span class="badge done">就绪</span>';
+    html+='<tr><td>'+k+'</td><td>'+v+'</td><td>'+badge+'</td><td>'+last+'</td><td><button class="btn btn-sm" onclick="doRefresh(\''+k+'\')">刷新</button></td></tr>';
+  }
+  document.getElementById('moduleStatus').innerHTML=html+'</tbody></table>';
+}
+async function loadAI(){const d=await get('/api/ai_screening');document.getElementById('time-ai').textContent=d.time||'';renderMD('aiContent',d.content);}
+async function loadNews(){const d=await get('/api/news_sentiment');document.getElementById('time-news').textContent=d.time||'';renderMD('newsContent',d.content);}
+async function loadDaily(){const d=await get('/api/daily_report');document.getElementById('time-daily').textContent=d.time||'';renderMD('dailyContent',d.content);}
+async function loadSentiment(){
+  const s=await get('/api/sentiment'),r=await get('/api/sentiment_report');
+  const north=s.north_flow||{};const today=parseFloat(north['今日北向净流入']);
+  const cards=[
+    {label:'情绪分数',value:s.score!=null?Number(s.score).toFixed(1):'--',sub:s.level||'',cls:s.score>=50?'up':'down'},
+    {label:'今日北向(亿)',value:isNaN(today)?'--':today.toFixed(2),sub:today>=0?'净流入':'净流出',cls:today>=0?'up':'down'},
+    {label:'涨停数',value:(s.limit_stats?s.limit_stats['涨停数']:'--'),sub:'跌停 '+(s.limit_stats?s.limit_stats['跌停数']:'--'),cls:'up'},
+  ];
+  document.getElementById('sentCards').innerHTML=cards.map(c=>'<div class="card"><div class="label">'+c.label+'</div><div class="value '+c.cls+'">'+c.value+'</div><div class="sub '+c.cls+'">'+(c.sub||'')+'</div></div>').join('');
+  renderMD('sentReport',r.content);
+}
+async function loadMoney(){
+  const d=await get('/api/north');
+  document.getElementById('time-north').textContent=d.time||'';
+  document.getElementById('northSummary').innerHTML=tableFromCSV(d.summary_header,d.summary_rows);
+  const hr=d.hist_rows||[];
+  const labels=[],vals=[];
+  hr.forEach(r=>{if(r&&r.length>=2){labels.push(r[0]);vals.push(parseFloat(r[1])||0);}});
+  labels.reverse();vals.reverse();
+  if(northChartObj)northChartObj.destroy();
+  const ctx=document.getElementById('northChart').getContext('2d');
+  northChartObj=new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{label:'北向净流入(亿)',data:vals,backgroundColor:vals.map(v=>v>=0?'#e24b4a':'#1d9e75')}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}}}}});
+  const l=await get('/api/lhb');
+  document.getElementById('lhbTable').innerHTML=tableFromCSV(l.header,l.rows);
+}
+async function loadScan(){const d=await get('/api/scan');document.getElementById('time-scan').textContent=d.time||'';document.getElementById('scanTable').innerHTML=tableFromCSV(d.header,d.rows);}
+async function loadPositions(){
+  const d=await get('/api/positions');
+  const cards=[
+    {label:'持仓市值(¥)',value:fmt(d.total_market_value),sub:d.count+' 只',cls:''},
+    {label:'浮动盈亏(¥)',value:fmt(d.total_pnl),sub:arrow(d.total_pnl),cls:pctCls(d.total_pnl)},
+  ];
+  document.getElementById('posCards').innerHTML=cards.map(c=>'<div class="card"><div class="label">'+c.label+'</div><div class="value '+c.cls+'">'+c.value+'</div><div class="sub '+c.cls+'">'+(c.sub||'')+'</div></div>').join('');
+  let h='<table><thead><tr><th>代码</th><th>名称</th><th>持仓</th><th>成本</th><th>参考价</th><th>市值</th><th>浮盈</th><th>盈亏%</th></tr></thead><tbody>';
+  (d.positions||[]).forEach(p=>{h+='<tr><td>'+p.code+'</td><td>'+p.name+'</td><td>'+p.qty+'</td><td>'+fmt(p.avg_cost)+'</td><td>'+fmt(p.last_price)+'</td><td>'+fmt(p.market_value)+'</td><td class="'+pctCls(p.pnl)+'">'+fmt(p.pnl)+'</td><td class="'+pctCls(p.pnl_pct)+'">'+(p.pnl_pct>=0?'+':'')+p.pnl_pct+'%</td></tr>';});
+  document.getElementById('posTable').innerHTML=(d.positions||[]).length?h+'</tbody></table>':'<div class="empty">无持仓</div>';
+  let hh='<table><thead><tr><th>时间</th><th>方向</th><th>代码</th><th>名称</th><th>价格</th><th>数量</th><th>金额</th><th>理由</th></tr></thead><tbody>';
+  (d.history||[]).forEach(t=>{const buy=t.action==='BUY';hh+='<tr><td>'+(t.time||'').replace('T',' ').slice(0,19)+'</td><td class="'+(buy?'tag-up':'tag-down')+'">'+(buy?'买入':'卖出')+'</td><td>'+t.code+'</td><td>'+t.name+'</td><td>'+fmt(t.price)+'</td><td>'+t.shares+'</td><td>'+fmt(t.amount)+'</td><td>'+(t.reason||'')+'</td></tr>';});
+  document.getElementById('histTable').innerHTML=(d.history||[]).length?hh+'</tbody></table>':'<div class="empty">无交易</div>';
+}
+async function loadReports(){
+  const d=await get('/api/reports');const list=d.files||[];
+  document.getElementById('reportList').innerHTML=list.length?list.map(f=>'<a href="javascript:void(0)" onclick="viewReport(\''+f.path+'\',\''+f.name+'\')">'+f.name+'<br><span style="font-size:11px;color:var(--muted)">'+(f.time||'')+' · '+((f.size||0)/1024).toFixed(0)+'KB</span></a>').join(''):'<div class="empty">暂无报告</div>';
+}
+async function smartPick(){const q=document.getElementById('pickQuery').value.trim();if(!q){alert('请输入选股研究条件');return;}document.getElementById('pickResult').textContent='研究中...';try{const r=await fetch('/api/screener/pick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});const j=await r.json();if(!j.ok){document.getElementById('pickResult').textContent=j.error;return;}document.getElementById('pickResult').textContent='完成';renderMD('screenerAnalysis',typeof j.result==='string'?j.result:JSON.stringify(j.result,null,2));}catch(e){document.getElementById('pickResult').textContent='失败';}}
+async function loadScreener(){
+  const d=await get('/api/screener');
+  document.getElementById('time-screener').textContent=d.timestamp?d.timestamp.slice(0,16).replace('T',' '):'';
+  document.getElementById('screenerTier').textContent='当前订阅: '+(d.tier||'free').toUpperCase();
+  document.getElementById('screenerDisclaimer').textContent=d.disclaimer||'';
+  if(!d.ok||!d.stocks){document.getElementById('screenerCards').innerHTML='';document.getElementById('screenerTable').innerHTML='<div class="empty">'+(d.error||'暂无数据,请先点刷新')+'</div>';renderMD('screenerAnalysis',null);return;}
+  const ms=d.market_stats||{};
+  const cards=[
+    {label:'研究信号数',value:d.stocks.length,sub:'上涨'+(ms.up||0)+'家',cls:''},
+    {label:'涨停数',value:ms.limit_up||0,sub:'跌顿'+(ms.limit_down||0),cls:'up'},
+  ];
+  document.getElementById('screenerCards').innerHTML=cards.map(c=>'<div class="card"><div class="label">'+c.label+'</div><div class="value '+c.cls+'">'+c.value+'</div><div class="sub '+c.cls+'">'+c.sub+'</div></div>').join('');
+  let h='<table><thead><tr><th>代码</th><th>名称</th><th>评分</th><th>信号</th><th>涨幅%</th><th>换手%</th><th>PE</th><th>市值(亿)</th></tr></thead><tbody>';
+  d.stocks.forEach(s=>{h+='<tr><td>'+s.code+'</td><td>'+s.name+'</td><td class="'+(s.score>=60?'up':(s.score<40?'down':''))+'">'+s.score+'</td><td>'+(s.signals||[]).map(t=>'<span class="badge">'+t+'</span> ').join('')+'</td><td class="'+(s.change_pct>=0?'up':'down')+'">'+(s.change_pct>=0?'+':'')+s.change_pct+'</td><td>'+s.turnover+'</td><td>'+(s.pe||'--')+'</td><td>'+(s.market_cap_yi||'--')+'</td></tr>';});
+  document.getElementById('screenerTable').innerHTML=h+'</tbody></table>';
+  renderMD('screenerAnalysis',d.analysis);
+}
+async function loadBacktest(){
+  const d=await get('/api/backtest');
+  document.getElementById('btDisclaimer').textContent=d.disclaimer||'';
+  document.getElementById('btTime').textContent=d.timestamp?('策略:'+(d.strategy||'')+' | '+d.timestamp.slice(0,16).replace('T',' ')):'';
+  if(!d.results||!d.results.length){document.getElementById('btCards').innerHTML='';document.getElementById('btTable').innerHTML='<div class="empty">'+(d.error||'暂无回测,请先跑 backtest_local.py')+'</div>';document.getElementById('btTrades').innerHTML='';return;}
+  const avgAlpha=d.results.reduce((a,x)=>a+(x.alpha_vs_buyhold||0),0)/d.results.length;
+  const avgWin=d.results.reduce((a,x)=>a+(x.win_rate||0),0)/d.results.length;
+  const cards=[{label:'标的数',value:d.results.length,cls:''},{label:'平均alpha',value:avgAlpha.toFixed(2)+'%',cls:avgAlpha>=0?'up':'down'},{label:'平均胜率',value:avgWin.toFixed(1)+'%',cls:''}];
+  document.getElementById('btCards').innerHTML=cards.map(c=>'<div class="card"><div class="label">'+c.label+'</div><div class="value '+c.cls+'">'+c.value+'</div></div>').join('');
+  let h='<table><thead><tr><th>代码</th><th>区间</th><th>交易</th><th>胜率%</th><th>策略%</th><th>买入持有%</th><th>alpha%</th><th>回撤%</th></tr></thead><tbody>';
+  d.results.forEach(r=>{h+='<tr><td>'+r.code+'</td><td>'+r.start+'~'+r.end+'</td><td>'+r.trade_count+'</td><td>'+r.win_rate+'</td><td class="'+(r.total_pnl_pct>=0?'up':'down')+'">'+r.total_pnl_pct+'</td><td class="'+(r.buy_hold_pct>=0?'up':'down')+'">'+r.buy_hold_pct+'</td><td class="'+(r.alpha_vs_buyhold>=0?'up':'down')+'">'+(r.alpha_vs_buyhold>=0?'+':'')+r.alpha_vs_buyhold+'</td><td class="down">'+r.max_drawdown_pct+'</td></tr>';});
+  document.getElementById('btTable').innerHTML=h+'</tbody></table>';
+  let th='<table><thead><tr><th>代码</th><th>日期</th><th>方向</th><th>价格</th><th>盈亏%</th></tr></thead><tbody>';
+  d.results.forEach(r=>{(r.trades||[]).forEach(t=>{th+='<tr><td>'+r.code+'</td><td>'+t.date+'</td><td class="'+(t.action==='BUY'?'tag-up':'tag-down')+'">'+(t.action==='BUY'?'买':'卖')+'</td><td>'+t.price+'</td><td>'+(t.pnl_pct!=null?'<span class="'+(t.pnl_pct>=0?'up':'down')+'">'+t.pnl_pct+'%</span>':'--')+'</td></tr>';});});
+  document.getElementById('btTrades').innerHTML=th+'</tbody></table>';
+}
+function viewReport(path,name){document.getElementById('reportViewer').classList.remove('hidden');document.getElementById('reportTitle').textContent=name;document.getElementById('reportFrame').src='/api/report?p='+encodeURIComponent(path);}
+async function doRefresh(mod){const r=await fetch('/api/refresh/'+mod,{method:'POST'});const j=await r.json();if(!j.ok){alert(j.error||'刷新失败');return;}startPoll();}
+async function refreshAll(){for(const m of ['daily_scan','money_tracker','sentiment','ai_screening']){await fetch('/api/refresh/'+m,{method:'POST'});}startPoll();}
+function startPoll(){if(pollTimer)return;pollTimer=setInterval(pollStatus,2000);pollStatus();}
+async function pollStatus(){
+  const s=await get('/api/refresh_status');let anyRun=false;
+  ['daily_scan','money_tracker','sentiment','ai_screening','news_sentiment','daily_workflow','screener','backtest'].forEach(m=>{
+    const el=document.getElementById('badge-'+m);
+    if(el){if(s.running[m]){el.className='badge run';el.textContent='运行中';anyRun=true;}else if(s.last_refresh[m]){el.className='badge done';el.textContent='完成 '+s.last_refresh[m].slice(11,16);}else{el.className='badge';el.textContent='';}}
+  });
+  if(!anyRun){clearInterval(pollTimer);pollTimer=null;loadTab(currentTab);loadOverview();}
+}
+function openSettings(){
+  document.getElementById('settingsModal').classList.add('show');
+  get('/api/config').then(c=>{
+    document.getElementById('pyInput').value=c.python_exe||'';
+    let html='';
+    for(const[py,info]of Object.entries(c.candidates||{})){html+='<div style="margin-bottom:4px">'+py+'<br><span style="color:'+(info.has_akshare?'var(--ok)':'var(--up)')+'">'+(info.version||'')+' · akshare:'+(info.has_akshare?'已装':'未装')+'</span></div>';}
+    document.getElementById('pyProbe').innerHTML=html;
+  });
+}
+function closeSettings(){document.getElementById('settingsModal').classList.remove('show');}
+function probePy(){const py=document.getElementById('pyInput').value;fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({python_exe:py})}).then(()=>openSettings());}
+function savePy(){const py=document.getElementById('pyInput').value;fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({python_exe:py})}).then(()=>{closeSettings();loadOverview();});}
+async function loadMe(){try{const m=await get('/api/auth/me');if(m.ok){document.getElementById('userName').textContent=m.user+' ('+(m.tier||'free').toUpperCase()+')';}}catch(e){}}
+function logout(){localStorage.removeItem('paynet_token');localStorage.removeItem('paynet_user');location.href='/';}
+loadOverview();loadMe();startPoll();
+</script>
+</body>
+</html>

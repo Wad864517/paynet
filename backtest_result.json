@@ -1,0 +1,43 @@
+{
+  "results": [
+    {
+      "trades": [
+        {
+          "date": "2026-07-03",
+          "action": "BUY",
+          "price": 23.29
+        },
+        {
+          "date": "2026-07-16",
+          "action": "SELL",
+          "price": 24.71,
+          "pnl_pct": 6.1
+        },
+        {
+          "date": "2026-07-17",
+          "action": "BUY",
+          "price": 23.4
+        },
+        {
+          "date": "2026-07-24",
+          "action": "SELL",
+          "price": 23.16,
+          "pnl_pct": -1.03
+        }
+      ],
+      "trade_count": 2,
+      "win_rate": 50.0,
+      "total_pnl_pct": 5.07,
+      "buy_hold_pct": -8.42,
+      "alpha_vs_buyhold": 13.49,
+      "max_drawdown_pct": -21.65,
+      "start": "2026-03-26",
+      "end": "2026-07-24",
+      "bars": 82,
+      "code": "600196"
+    }
+  ],
+  "timestamp": "2026-07-27T09:53:38.327997",
+  "strategy": "双均线(10/30)+RSI(14)过滤超买",
+  "disclaimer": "回测基于历史数据，历史表现不代表未来收益，不构成投资建议。"
+}

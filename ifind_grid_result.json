@@ -1,0 +1,190 @@
+{
+  "per_stock_best": {
+    "600519": {
+      "params": [
+        5,
+        20,
+        70
+      ],
+      "alpha": 3.8,
+      "win_rate": 33.3,
+      "trades": 12
+    },
+    "601318": {
+      "params": [
+        5,
+        60,
+        80
+      ],
+      "alpha": 21.59,
+      "win_rate": 66.7,
+      "trades": 3
+    },
+    "300750": {
+      "params": [
+        20,
+        30,
+        75
+      ],
+      "alpha": -3.98,
+      "win_rate": 62.5,
+      "trades": 8
+    },
+    "600036": {
+      "params": [
+        10,
+        60,
+        70
+      ],
+      "alpha": 8.39,
+      "win_rate": 50.0,
+      "trades": 4
+    },
+    "002594": {
+      "params": [
+        5,
+        60,
+        70
+      ],
+      "alpha": 27.69,
+      "win_rate": 50.0,
+      "trades": 6
+    },
+    "000858": {
+      "params": [
+        5,
+        60,
+        70
+      ],
+      "alpha": 39.44,
+      "win_rate": 0,
+      "trades": 0
+    },
+    "600030": {
+      "params": [
+        5,
+        30,
+        70
+      ],
+      "alpha": 15.95,
+      "win_rate": 69.2,
+      "trades": 13
+    },
+    "000333": {
+      "params": [
+        5,
+        20,
+        70
+      ],
+      "alpha": -2.37,
+      "win_rate": 68.4,
+      "trades": 19
+    },
+    "601166": {
+      "params": [
+        5,
+        20,
+        75
+      ],
+      "alpha": 28.15,
+      "win_rate": 40.0,
+      "trades": 10
+    },
+    "002415": {
+      "params": [
+        5,
+        30,
+        80
+      ],
+      "alpha": -4.67,
+      "win_rate": 71.4,
+      "trades": 7
+    }
+  },
+  "global_best": {
+    "params": [
+      10,
+      20,
+      70
+    ],
+    "avg_alpha": 4.63
+  },
+  "global_results": [
+    {
+      "code": "600519",
+      "alpha": 3.51,
+      "win_rate": 27.3,
+      "pnl": -4.76,
+      "buy_hold": -8.27
+    },
+    {
+      "code": "601318",
+      "alpha": -3.24,
+      "win_rate": 54.5,
+      "pnl": -12.13,
+      "buy_hold": -8.89
+    },
+    {
+      "code": "300750",
+      "alpha": -24.06,
+      "win_rate": 46.7,
+      "pnl": 9.88,
+      "buy_hold": 33.94
+    },
+    {
+      "code": "600036",
+      "alpha": 4.56,
+      "win_rate": 50.0,
+      "pnl": -5.75,
+      "buy_hold": -10.31
+    },
+    {
+      "code": "002594",
+      "alpha": 23.33,
+      "win_rate": 45.5,
+      "pnl": 7.11,
+      "buy_hold": -16.22
+    },
+    {
+      "code": "000858",
+      "alpha": 32.39,
+      "win_rate": 33.3,
+      "pnl": -7.05,
+      "buy_hold": -39.44
+    },
+    {
+      "code": "600030",
+      "alpha": 11.28,
+      "win_rate": 64.3,
+      "pnl": 5.07,
+      "buy_hold": -6.21
+    },
+    {
+      "code": "000333",
+      "alpha": -3.45,
+      "win_rate": 73.7,
+      "pnl": 16.38,
+      "buy_hold": 19.83
+    },
+    {
+      "code": "601166",
+      "alpha": 15.9,
+      "win_rate": 62.5,
+      "pnl": -2.2,
+      "buy_hold": -18.1
+    },
+    {
+      "code": "002415",
+      "alpha": -13.88,
+      "win_rate": 57.1,
+      "pnl": 12.66,
+      "buy_hold": 26.54
+    }
+  ],
+  "positive_count": 6,
+  "total": 10,
+  "stocks_tested": 10,
+  "param_combos": 45,
+  "timestamp": "2026-07-29T14:00:53.157543",
+  "disclaimer": "grid search 多股票参数优化，存在严重过拟合风险，最优参数不保证未来有效，不构成投资建议。"
+}

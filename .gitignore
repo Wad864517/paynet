@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 *.pyo
+
 build/
 build2/
 build3/
@@ -8,32 +9,18 @@ build_final/
 dist2/
 dist3/
 dist_final/
-*.exe
+
 *.pkg
 *.pyz
 *.toc
-*.html
 *.zip
-
-data/
-reports/
 
 .quant/
 .workbuddy/
-
-*.log
-*.json
-!package.json
-
-.DS_Store
-Thumbs.db
 
 venv/
 env/
 .env
 
-users.db
-*.db
-
-*.md
-!README.md
+.DS_Store
+Thumbs.db

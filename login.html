@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>paynet 量化 · 登录</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--border:#e6e8eb;--text:#1f2329;--muted:#8a8f99;--accent:#0c447c;--up:#e24b4a}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#0c447c,#185fa5);min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--text)}
+.wrap{background:#fff;border-radius:14px;padding:32px;width:360px;max-width:92%;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+h1{font-size:20px;margin:0 0 4px;font-weight:500;text-align:center;color:var(--accent)}
+.sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:24px}
+.tabs{display:flex;gap:4px;margin-bottom:18px;background:#f0f2f5;border-radius:8px;padding:4px}
+.tabs button{flex:1;border:none;background:transparent;padding:8px;cursor:pointer;font-size:13px;color:var(--muted);border-radius:6px}
+.tabs button.active{background:#fff;color:var(--accent);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px}
+.field input:focus{outline:none;border-color:var(--accent)}
+.hidden{display:none}
+.btn{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-top:6px}
+.btn:hover{background:#0a3560}
+.btn:disabled{opacity:.5;cursor:wait}
+.hint{font-size:11px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.6;background:#fafbfc;padding:8px;border-radius:6px}
+.hint b{color:var(--accent)}
+.err{color:var(--up);font-size:12px;margin-top:8px;text-align:center;min-height:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>paynet 量化</h1>
+  <div class="sub">个人 A 股量化决策助手 · 买断制</div>
+  <div class="tabs">
+    <button class="active" data-m="login">登录</button>
+    <button data-m="register">注册</button>
+    <button data-m="activate">激活</button>
+  </div>
+  <div class="field"><label>用户名</label><input id="u" placeholder="用户名"></div>
+  <div class="field"><label>密码</label><input id="p" type="password" placeholder="密码(至少6位)"></div>
+  <div class="field hidden" id="keyField"><label>买断授权码</label><input id="k" placeholder="PAYNET-..."></div>
+  <button class="btn" id="go">登录</button>
+  <div class="err" id="err"></div>
+  <div class="hint" id="hint">演示授权码规则：<b>PAYNET-用户名大写-2026</b><br>例：用户名 demo → PAYNET-DEMO-2026</div>
+</div>
+<script>
+let mode='login';
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  mode=b.dataset.m;
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
+  $('keyField').classList.toggle('hidden',mode!=='activate');
+  $('go').textContent=mode==='login'?'登录':(mode==='register'?'注册':'激活并登录');
+  $('hint').classList.toggle('hidden',mode==='register');
+});
+$('go').onclick=async()=>{
+  $('err').textContent='';$('go').disabled=true;
+  const body={username:$('u').value.trim(),password:$('p').value};
+  if(mode==='activate') body.license_key=$('k').value.trim();
+  const url='/api/auth/'+(mode==='register'?'register':mode==='activate'?'activate':'login');
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j=await r.json();
+    if(!j.ok){$('err').textContent=j.error||'失败';$('go').disabled=false;return;}
+    if(mode==='register'){$('err').textContent='注册成功，请切到登录';$('go').disabled=false;return;}
+    if(j.token){localStorage.setItem('paynet_token',j.token);localStorage.setItem('paynet_user',body.username);}
+    if(mode==='login'&&!j.licensed){$('err').textContent='请先激活（切到激活页）';$('go').disabled=false;return;}
+    location.href='/app';
+  }catch(e){$('err').textContent='网络错误';$('go').disabled=false;}
+};
+</script>
+</body>
+</html>

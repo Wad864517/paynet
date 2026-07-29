@@ -1,0 +1,191 @@
+09:02:28 [INFO] 🕐 运行时间: 2026-07-25 09:02:28
+09:02:28 [INFO] 📁 数据保存目录: data\20260725
+09:02:28 [DEBUG] ==================================================
+09:02:28 [DEBUG] 开始大资金追踪...
+09:02:28 [DEBUG] ==================================================
+09:02:28 [INFO] 
+==================================================
+09:02:28 [INFO] 📊 北向资金追踪（外资动向）
+09:02:28 [INFO] ==================================================
+09:02:28 [DEBUG] 步骤1: 获取北向资金当日汇总数据...
+09:02:28 [DEBUG] 开始调用 stock_hsgt_fund_flow_summary_em，参数: args=(), kwargs={}
+09:02:28 [DEBUG] [stock_hsgt_fund_flow_summary_em] 第1次尝试...
+09:02:28 [DEBUG] [stock_hsgt_fund_flow_summary_em] 成功！耗时0.48s，数据量=4行
+09:02:28 [DEBUG] 汇总数据列名: ['交易日', '类型', '板块', '资金方向', '交易状态', '成交净买额', '资金净流入', '当日资金余额', '上涨数', '持平数', '下跌数', '相关指数', '指数涨跌幅']
+09:02:28 [DEBUG] 汇总数据:
+          交易日   类型      板块 资金方向  交易状态     成交净买额  资金净流入  当日资金余额  上涨数  持平数   下跌数  相关指数  指数涨跌幅
+0  2026-07-24  沪港通     沪股通   北向     3  0.000000    0.0     0.0  166    9  1465  上证指数  -1.61
+1  2026-07-24  沪港通  港股通(沪)   南向     3 -5.514214  420.0     0.0   70   21   525  恒生指数  -0.98
+2  2026-07-24  深港通     深股通   北向     3  0.000000    0.0     0.0  167    4  1704  深证成指  -2.47
+3  2026-07-24  深港通  港股通(深)   南向     3 -9.667737  420.0     0.0   70   21   525  恒生指数  -0.98
+09:02:28 [INFO] 
+📅 当日北向资金数据 (2026-07-24):
+09:02:28 [INFO]   📈 沪股通净买入: +0.00 亿
+09:02:28 [INFO]   📈 深股通净买入: +0.00 亿
+09:02:28 [INFO]   📊 北向资金合计: +0.00 亿
+09:02:28 [INFO]   🟡 北向资金小幅流出，外资态度中性偏空
+09:02:28 [DEBUG] 保存北向资金汇总数据到CSV...
+09:02:28 [DEBUG] 步骤2: 获取北向资金历史数据...
+09:02:28 [DEBUG] 开始调用 stock_hsgt_hist_em，参数: args=(), kwargs={'symbol': '北向资金'}
+09:02:28 [DEBUG] [stock_hsgt_hist_em] 第1次尝试...
+09:02:31 [DEBUG] [stock_hsgt_hist_em] 成功！耗时2.77s，数据量=2716行
+09:02:31 [DEBUG] 历史数据共2716行，有效数据2264行
+09:02:31 [INFO] 
+📅 历史北向资金数据（近10个有数据交易日）:
+09:02:31 [INFO]   2024-08-05  📈 +2.88 亿
+09:02:31 [INFO]   2024-08-06  📉 -62.51 亿
+09:02:31 [INFO]   2024-08-07  📉 -21.36 亿
+09:02:31 [INFO]   2024-08-08  📈 +11.03 亿
+09:02:31 [INFO]   2024-08-09  📉 -77.65 亿
+09:02:31 [INFO]   2024-08-12  📉 -7.73 亿
+09:02:31 [INFO]   2024-08-13  📉 -25.27 亿
+09:02:31 [INFO]   2024-08-14  📉 -71.66 亿
+09:02:31 [INFO]   2024-08-15  📈 +122.06 亿
+09:02:31 [INFO]   2024-08-16  📉 -67.75 亿
+09:02:31 [DEBUG] 近5日合计: -50.36亿，近10日合计: -197.96亿
+09:02:31 [DEBUG] 保存北向资金历史数据到CSV...
+09:02:31 [INFO] 
+==================================================
+09:02:31 [INFO] 📊 板块资金流向（今日资金去哪了）
+09:02:31 [INFO] ==================================================
+09:02:31 [DEBUG] 获取行业板块资金流向数据...
+09:02:31 [DEBUG] 开始调用 stock_sector_fund_flow_rank，参数: args=(), kwargs={'indicator': '今日', 'sector_type': '行业资金流'}
+09:02:31 [DEBUG] [stock_sector_fund_flow_rank] 第1次尝试...
+09:02:31 [WARNING] [stock_sector_fund_flow_rank] 第1次失败(('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))，2.1秒后重试...
+09:02:33 [DEBUG] [stock_sector_fund_flow_rank] 第2次尝试...
+09:02:34 [WARNING] [stock_sector_fund_flow_rank] 第2次失败(('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))，3.8秒后重试...
+09:02:38 [DEBUG] [stock_sector_fund_flow_rank] 第3次尝试...
+09:02:38 [WARNING] [stock_sector_fund_flow_rank] 第3次失败(('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))，4.8秒后重试...
+09:02:43 [DEBUG] [stock_sector_fund_flow_rank] 第4次尝试...
+09:02:43 [WARNING] [stock_sector_fund_flow_rank] 第4次失败(('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))，7.2秒后重试...
+09:02:51 [DEBUG] [stock_sector_fund_flow_rank] 第5次尝试...
+09:02:51 [ERROR] [stock_sector_fund_flow_rank] 5次重试全部失败，最后错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+09:02:51 [ERROR] ❌ 板块资金流向获取失败: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Traceback (most recent call last):
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\adapters.py", line 696, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connectionpool.py", line 842, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\util\retry.py", line 498, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\dbtest\paynet\money_tracker.py", line 136, in track_sector_flow
+    sector = fetch_with_retry(
+             ^^^^^^^^^^^^^^^^^
+  File "D:\dbtest\paynet\money_tracker.py", line 47, in fetch_with_retry
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\akshare\stock\stock_fund_em.py", line 498, in stock_sector_fund_flow_rank
+    r = requests.get(url, params=params, headers=headers)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\api.py", line 87, in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\api.py", line 71, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sendy322\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\adapters.py", line 711, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+09:02:51 [INFO] 
+==================================================
+09:02:51 [INFO] 📊 龙虎榜数据（机构+游资动向）
+09:02:51 [INFO] ==================================================
+09:02:51 [DEBUG] 查询龙虎榜数据: 20260718 ~ 20260725
+09:02:51 [DEBUG] 开始调用 stock_lhb_jgmmtj_em，参数: args=(), kwargs={'start_date': '20260718', 'end_date': '20260725'}
+09:02:51 [DEBUG] [stock_lhb_jgmmtj_em] 第1次尝试...
+09:02:52 [DEBUG] [stock_lhb_jgmmtj_em] 成功！耗时1.11s，数据量=297行
+09:02:52 [DEBUG] 龙虎榜数据列名: ['序号', '代码', '名称', '收盘价', '涨跌幅', '买方机构数', '卖方机构数', '机构买入总额', '机构卖出总额', '机构买入净额', '市场总成交额', '机构净买额占总成交额比', '换手率', '流通市值', '上榜原因', '上榜日期']
+09:02:52 [DEBUG] 共297条龙虎榜记录
+09:02:52 [INFO] 
+近一周机构龙虎榜数据（共297条）:
+09:02:52 [INFO]   1. [2026-07-23] 600664 哈药股份 | 机构净买入:   1,210,897,600 | 有价格涨跌幅限制的连续10个交易日内收盘价格涨幅偏离值累计达到100%的证券
+09:02:52 [INFO]   2. [2026-07-21] 002281 光迅科技 | 机构净买入:     677,410,009 | 日振幅值达到15%的前5只证券
+09:02:52 [INFO]   3. [2026-07-22] 002396 星网锐捷 | 机构净买入:     599,686,951 | 日换手率达到20%的前5只证券
+09:02:52 [INFO]   4. [2026-07-22] 002396 星网锐捷 | 机构净买入:     599,686,951 | 日振幅值达到15%的前5只证券
+09:02:52 [INFO]   5. [2026-07-22] 000938 紫光股份 | 机构净买入:     580,842,186 | 连续三个交易日内，涨幅偏离值累计达到20%的证券
+09:02:52 [INFO]   6. [2026-07-20] 002281 光迅科技 | 机构净买入:     358,243,672 | 日跌幅偏离值达到7%的前5只证券
+09:02:52 [INFO]   7. [2026-07-21] 688728 格科微 | 机构净买入:     310,595,710 | 有价格涨跌幅限制的日收盘价格涨幅达到15%的前五只证券
+09:02:52 [INFO]   8. [2026-07-20] 001309 德明利 | 机构净买入:     268,919,285 | 日跌幅偏离值达到7%的前5只证券
+09:02:52 [INFO]   9. [2026-07-22] 603459 红板科技 | 机构净买入:     268,804,697 | 有价格涨跌幅限制的日换手率达到20%的前五只证券
+09:02:52 [INFO]   10. [2026-07-22] 605196 华通线缆 | 机构净买入:     265,396,596 | 非S证券连续三个交易日内收盘价格涨幅偏离值累计达到20%的证券
+09:02:52 [INFO]   11. [2026-07-20] 600330 天通股份 | 机构净买入:     258,942,330 | 非S证券连续三个交易日内收盘价格跌幅偏离值累计达到20%的证券
+09:02:52 [INFO]   12. [2026-07-21] 300604 长川科技 | 机构净买入:     254,255,771 | 日涨幅达到15%的前5只证券
+09:02:52 [INFO]   13. [2026-07-23] 600711 盛屯矿业 | 机构净买入:     247,988,853 | 非S证券连续三个交易日内收盘价格涨幅偏离值累计达到20%的证券
+09:02:52 [INFO]   14. [2026-07-23] 301583 托伦斯 | 机构净买入:     230,064,468 | 日换手率达到30%的前5只证券
+09:02:52 [INFO]   15. [2026-07-20] 002432 九安医疗 | 机构净买入:     228,561,790 | 日振幅值达到15%的前5只证券
+09:02:52 [INFO] 
+🏦 机构重点关注个股:
+09:02:52 [DEBUG] 机构净买入TOP5:
+09:02:52 [INFO]   600664 哈药股份: 机构净买入 1,210,897,600
+09:02:52 [DEBUG]     详细: 买入总额=7,044,906,700, 卖出总额=5,834,009,100
+09:02:52 [INFO]   002281 光迅科技: 机构净买入 677,410,009
+09:02:52 [DEBUG]     详细: 买入总额=1,573,348,398, 卖出总额=895,938,389
+09:02:52 [INFO]   002396 星网锐捷: 机构净买入 599,686,951
+09:02:52 [DEBUG]     详细: 买入总额=917,135,559, 卖出总额=317,448,608
+09:02:52 [INFO]   002396 星网锐捷: 机构净买入 599,686,951
+09:02:52 [DEBUG]     详细: 买入总额=917,135,559, 卖出总额=317,448,608
+09:02:52 [INFO]   000938 紫光股份: 机构净买入 580,842,186
+09:02:52 [DEBUG]     详细: 买入总额=3,510,336,226, 卖出总额=2,929,494,040
+09:02:52 [DEBUG] 保存龙虎榜数据到CSV...
+09:02:52 [INFO] 
+==================================================
+09:02:52 [INFO] 📋 资金追踪汇总
+09:02:52 [INFO] ==================================================
+09:02:52 [INFO]   📁 数据目录: data\20260725
+09:02:52 [INFO]   📝 日志文件: data\20260725\money_tracker_090228.log
+09:02:52 [INFO]   🕐 完成时间: 2026-07-25 09:02:52
+09:02:52 [INFO] 
+✅ 资金追踪完成！

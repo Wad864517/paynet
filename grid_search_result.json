@@ -1,0 +1,211 @@
+{
+  "results": [
+    {
+      "code": "600196",
+      "top": [
+        {
+          "trades": [
+            {
+              "date": "2026-06-29",
+              "action": "BUY",
+              "price": 22.73
+            },
+            {
+              "date": "2026-07-16",
+              "action": "SELL",
+              "price": 24.71,
+              "pnl_pct": 8.71
+            },
+            {
+              "date": "2026-07-17",
+              "action": "BUY",
+              "price": 23.4
+            },
+            {
+              "date": "2026-07-24",
+              "action": "SELL",
+              "price": 23.16,
+              "pnl_pct": -1.03
+            }
+          ],
+          "trade_count": 2,
+          "win_rate": 50.0,
+          "total_pnl_pct": 7.68,
+          "buy_hold_pct": -8.42,
+          "alpha_vs_buyhold": 16.1,
+          "max_drawdown_pct": -21.65,
+          "start": "2026-03-26",
+          "end": "2026-07-24",
+          "bars": 82,
+          "params": {
+            "fast": 5,
+            "slow": 20,
+            "rsi_ob": 70
+          }
+        },
+        {
+          "trades": [
+            {
+              "date": "2026-06-29",
+              "action": "BUY",
+              "price": 22.73
+            },
+            {
+              "date": "2026-07-16",
+              "action": "SELL",
+              "price": 24.71,
+              "pnl_pct": 8.71
+            },
+            {
+              "date": "2026-07-17",
+              "action": "BUY",
+              "price": 23.4
+            },
+            {
+              "date": "2026-07-24",
+              "action": "SELL",
+              "price": 23.16,
+              "pnl_pct": -1.03
+            }
+          ],
+          "trade_count": 2,
+          "win_rate": 50.0,
+          "total_pnl_pct": 7.68,
+          "buy_hold_pct": -8.42,
+          "alpha_vs_buyhold": 16.1,
+          "max_drawdown_pct": -21.65,
+          "start": "2026-03-26",
+          "end": "2026-07-24",
+          "bars": 82,
+          "params": {
+            "fast": 5,
+            "slow": 20,
+            "rsi_ob": 75
+          }
+        },
+        {
+          "trades": [
+            {
+              "date": "2026-07-08",
+              "action": "BUY",
+              "price": 22.95
+            },
+            {
+              "date": "2026-07-16",
+              "action": "SELL",
+              "price": 24.71,
+              "pnl_pct": 7.67
+            },
+            {
+              "date": "2026-07-17",
+              "action": "BUY",
+              "price": 23.4
+            },
+            {
+              "date": "2026-07-24",
+              "action": "SELL",
+              "price": 23.16,
+              "pnl_pct": -1.03
+            }
+          ],
+          "trade_count": 2,
+          "win_rate": 50.0,
+          "total_pnl_pct": 6.64,
+          "buy_hold_pct": -8.42,
+          "alpha_vs_buyhold": 15.06,
+          "max_drawdown_pct": -21.65,
+          "start": "2026-03-26",
+          "end": "2026-07-24",
+          "bars": 82,
+          "params": {
+            "fast": 10,
+            "slow": 40,
+            "rsi_ob": 70
+          }
+        },
+        {
+          "trades": [
+            {
+              "date": "2026-07-08",
+              "action": "BUY",
+              "price": 22.95
+            },
+            {
+              "date": "2026-07-16",
+              "action": "SELL",
+              "price": 24.71,
+              "pnl_pct": 7.67
+            },
+            {
+              "date": "2026-07-17",
+              "action": "BUY",
+              "price": 23.4
+            },
+            {
+              "date": "2026-07-24",
+              "action": "SELL",
+              "price": 23.16,
+              "pnl_pct": -1.03
+            }
+          ],
+          "trade_count": 2,
+          "win_rate": 50.0,
+          "total_pnl_pct": 6.64,
+          "buy_hold_pct": -8.42,
+          "alpha_vs_buyhold": 15.06,
+          "max_drawdown_pct": -21.65,
+          "start": "2026-03-26",
+          "end": "2026-07-24",
+          "bars": 82,
+          "params": {
+            "fast": 10,
+            "slow": 40,
+            "rsi_ob": 75
+          }
+        },
+        {
+          "trades": [
+            {
+              "date": "2026-07-09",
+              "action": "BUY",
+              "price": 22.95
+            },
+            {
+              "date": "2026-07-16",
+              "action": "SELL",
+              "price": 24.71,
+              "pnl_pct": 7.67
+            },
+            {
+              "date": "2026-07-17",
+              "action": "BUY",
+              "price": 23.4
+            },
+            {
+              "date": "2026-07-24",
+              "action": "SELL",
+              "price": 23.16,
+              "pnl_pct": -1.03
+            }
+          ],
+          "trade_count": 2,
+          "win_rate": 50.0,
+          "total_pnl_pct": 6.64,
+          "buy_hold_pct": -8.42,
+          "alpha_vs_buyhold": 15.06,
+          "max_drawdown_pct": -21.65,
+          "start": "2026-03-26",
+          "end": "2026-07-24",
+          "bars": 82,
+          "params": {
+            "fast": 20,
+            "slow": 30,
+            "rsi_ob": 70
+          }
+        }
+      ]
+    }
+  ],
+  "timestamp": "2026-07-27T09:53:39.511333",
+  "disclaimer": "参数优化基于历史数据，存在过拟合风险，不构成投资建议。最优参数不保证未来有效。"
+}
